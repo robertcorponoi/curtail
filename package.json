@@ -1,0 +1,30 @@
+{
+  "name": "curtail",
+  "version": "0.1.0",
+  "description": "Curtail is a simple browser based image manipulation library. Currently the only functionality offered by Curtail is cropping but more functionality is coming soon.",
+  "main": "curtail.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertcorponoi/curtail.git"
+  },
+  "keywords": [
+    "image",
+    "crop"
+  ],
+  "author": "Robert Corponoi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robertcorponoi/curtail/issues"
+  },
+  "homepage": "https://github.com/robertcorponoi/curtail#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}
