@@ -1,13 +1,11 @@
 'use strict'
 
-import * as extract from './extract.js';
-
 /**
  * Curtail is a pure JavaScript in browser canvas-based image manipulation tool.
  * 
  * @since 0.1.0
  */
-export class Curtail {
+class Curtail {
 
   /**
    * @param {Object} [options] Options used to alter the functionality of Curtail.

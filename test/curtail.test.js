@@ -1,51 +1,43 @@
 'use strict'
 
 import { Curtail } from '../curtail.js';
+import * as extract from '../extract.js';
 
-describe('#crop()', function () {
+// Test the fucionality of Curtail's image manipulation features.
+describe('Curtail', () => {
 
-  it('should crop an image at (200, 200) and result in a dimension of 300x400', async function () {
-    const curtail = new Curtail();
+  // Test the crop function which resizes images.
+  describe('#crop()', () => {
 
-    const croppedImage = await curtail.crop('../test/wallpaper.png', { locX: 200, locY: 200, size: '300x400' }).catch((err) => console.log(err));
+    // The specified image should be cropped at the origin but with a new dimension of 300x400.
+    it('should crop an image at (0, 0) and result in a new dimension of 300x400', async () => {
 
-    croppedImage.onload = () => {};
+      const curtail = new Curtail();
 
-    setTimeout(() => {
-      let image = {
-        width: croppedImage.width,
-        height: croppedImage.height
-      };
+      const crop = await curtail.crop('../test/wallpaper.png', 0, 0, 300, 400).catch((err) => console.log(err));
 
-      let expected = {
-        width: 300,
-        height: 400
-      };
+      const cropDimensions = { width: crop.width, height: crop.height };
 
-      chai.expect(image).to.deep.equal(expected);
-    }, 4);
+      chai.expect(cropDimensions).to.deep.equal({ width: 0, height: 0 });
+
+    });
+
   });
 
-  it('should crop an image at (0, 0) due to no location being specified and result in a dimension of 1803x895 due to the specified size being larger than the image', async function () {
-    const curtail = new Curtail();
+  // Test the convert function which converts images between file types.
+  describe('#convert()', () => {
 
-    const croppedImage = await curtail.crop('../test/wallpaper.png', { size: '2000x1000' }).catch((err) => console.log(err));
+    // The specified image should be changed from wallpaper.png to wallpaper.jpg.
+    it('should convert the image from .png to .jpg', async () => {
 
-    croppedImage.onload = () => {};
+      const curtail = new Curtail();
 
-    setTimeout(() => {
-      let image = {
-        width: croppedImage.width,
-        height: croppedImage.height
-      };
+      const convert = await curtail.convert('../test/wallpaper.png', curtail.FORMAT.JPG);
 
-      let expected = {
-        width: 1803,
-        height: 895
-      };
+      
 
-      chai.expect(image).to.deep.equal(expected);
-    }, 4);
+    });
+
   });
 
 });
