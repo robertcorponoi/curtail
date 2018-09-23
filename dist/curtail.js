@@ -1,11 +1,99 @@
 'use strict'
 
 /**
+ * The functions in extract deal with getting information from the
+ * src path such as file name or file extension.
+ * 
+ * @since 1.0.0
+ */
+
+/**
+ * Extract the file name and extension from the provided src path.
+ * 
+ * @since 1.0.0
+ * 
+ * @param {string} src The path to the image file.
+ * 
+ * @returns {Object} An object containing the file's name and extension.
+ */
+function getFileInfo(src) {
+
+  let nameIndex = 0;
+  let extIndex = 0;
+
+  let fileInfo = {
+    name: null,
+    ext: null
+  };
+
+  if (src.lastIndexOf('/') > -1) nameIndex = src.lastIndexOf('/');
+
+  extIndex = src.lastIndexOf('.');
+
+  fileInfo.name = src.slice(nameIndex + 1, extIndex);
+  fileInfo.ext = src.slice(extIndex + 1);
+
+  return fileInfo;
+
+}
+
+/**
+ * The functions in math deal with any mathematical operations not
+ * supported by native JavaScript.
+ * 
+ * @since 0.1.0
+ */
+
+/**
+ * Simplify a fraction using the greatest common divisor.
+ * 
+ * @since 0.1.0
+ * 
+ * @param {number} numerator The top number of the original fraction.
+ * @param {number} denominator The bottom number of the original fraction.
+ * 
+ * @returns {Array} An array consisting of the two values representing the numerator and denominator of the simplified fraction.
+ */
+function simplify(numerator, denominator) {
+
+  const num = gcd(numerator, denominator);
+
+  return [numerator / num, denominator / num];
+
+}
+
+/**
+ * Find the greatest common divisor between two numbers.
+ * 
+ * @since 0.1.0
+ * 
+ * @param {number} a The first number.
+ * @param {number} b The second number.
+ * 
+ * @returns {number} The GCD between the two numbers.
+ */
+function gcd(a, b) {
+
+  while (b !== 0) {
+
+    let temp = a;
+
+    a = b;
+
+    b = temp % b;
+
+  }
+
+  return a;
+
+}
+
+/**
  * Curtail is a pure JavaScript in browser canvas-based image manipulation tool.
  * 
  * @since 0.1.0
  */
-class Curtail {
+export class Curtail {
 
   /**
    * @param {Object} [options] Options used to alter the functionality of Curtail.
@@ -203,6 +291,60 @@ class Curtail {
 
       originalImage.src = src;
       if (this._options.crossOrigin) originalImage.crossOrigin = this._options.crossOrigin;
+
+    });
+
+  }
+
+  /**
+   * Resize an image.
+   * 
+   * The aspect ratio is automatically preserved when resizing an image unless
+   * the `preserveAspectRatio` parameter is set to false.
+   * 
+   * @since 0.1.0
+   * 
+   * @param {string} src The path to the image to convert.
+   * @param {string} dimsension Whether you want to resize the width or height of the image.
+   * @param {number} size The new size to make the specified dimension in pixels.
+   * @param {boolean} [preserveAspectRatio=true] Indicates whether the width and height should resize together to preserve the aspect ratio of the image.
+   * 
+   * @returns {Promise<HTMLImageElement>} The newly resized image.
+   */
+  resize(src, dimension, size, preserveAspectRatio = true) {
+
+    const image = new Image();
+
+    return new Promise((resolve, reject) => {
+
+      image.onload = () => {
+
+        const aspectRatio = math.simplify(image.width, image.height);
+
+        if (dimension === 'width') {
+
+          image.width = size;
+
+          if (preserveAspectRatio) image.height = Math.round((aspectRatio[1] / aspectRatio[0]) * size);
+
+        }
+
+        else if (dimension === 'height') {
+
+          image.height = size;
+
+          if (preserveAspectRatio) image.width = Math.round((aspectRatio[0] / aspectRatio[1]) * size);
+
+        }
+
+        resolve(image);
+
+      };
+
+      image.onerror = (err) => reject(err);
+
+      image.src = src;
+      if (this._options.crossOrigin) image.crossOrigin = this._options.crossOrigin;
 
     });
 

@@ -1,6 +1,7 @@
 'use strict'
 
 import * as extract from './extract.js';
+import * as math from './math.js';
 
 /**
  * Curtail is a pure JavaScript in browser canvas-based image manipulation tool.
@@ -205,6 +206,60 @@ export class Curtail {
 
       originalImage.src = src;
       if (this._options.crossOrigin) originalImage.crossOrigin = this._options.crossOrigin;
+
+    });
+
+  }
+
+  /**
+   * Resize an image.
+   * 
+   * The aspect ratio is automatically preserved when resizing an image unless
+   * the `preserveAspectRatio` parameter is set to false.
+   * 
+   * @since 0.1.0
+   * 
+   * @param {string} src The path to the image to convert.
+   * @param {string} dimsension Whether you want to resize the width or height of the image.
+   * @param {number} size The new size to make the specified dimension in pixels.
+   * @param {boolean} [preserveAspectRatio=true] Indicates whether the width and height should resize together to preserve the aspect ratio of the image.
+   * 
+   * @returns {Promise<HTMLImageElement>} The newly resized image.
+   */
+  resize(src, dimension, size, preserveAspectRatio = true) {
+
+    const image = new Image();
+
+    return new Promise((resolve, reject) => {
+
+      image.onload = () => {
+
+        const aspectRatio = math.simplify(image.width, image.height);
+
+        if (dimension === 'width') {
+
+          image.width = size;
+
+          if (preserveAspectRatio) image.height = Math.round((aspectRatio[1] / aspectRatio[0]) * size);
+
+        }
+
+        else if (dimension === 'height') {
+
+          image.height = size;
+
+          if (preserveAspectRatio) image.width = Math.round((aspectRatio[0] / aspectRatio[1]) * size);
+
+        }
+
+        resolve(image);
+
+      };
+
+      image.onerror = (err) => reject(err);
+
+      image.src = src;
+      if (this._options.crossOrigin) image.crossOrigin = this._options.crossOrigin;
 
     });
 

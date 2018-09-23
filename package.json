@@ -1,6 +1,6 @@
 {
   "name": "curtail",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Curtail is a pure JavaScript in browser canvas-based image manipulation tool.",
   "main": "curtail.js",
   "scripts": {

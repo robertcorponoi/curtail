@@ -98,7 +98,7 @@ Using `async/await`:
 async function main() {
 
   // This will take an image and start cropping at (100, 100) and create a new image
-// with a width of 720x480.
+  // with a width of 720x480.
   // You should probably use `try, catch`
   const newImage = curtail.crop('./path/to/image.png', 100, 100, 720, 480).catch((err) => console.log(err));
 
@@ -143,11 +143,54 @@ Using `async/await`:
 async function main() {
 
   // This will take an image and start cropping at (100, 100) and create a new image
-// with a width of 720x480.
+  // with a width of 720x480.
   // You should probably use `try, catch`
   const newImage = curtail.convert('./path/to/image.png', curtail.FORMAT.JPG).catch((err) => console.log(err));
 
   // newImage will be your newly converted image and if autoDownload is set to true
+  // then you will have a local copy downloaded at this time.
+
+}
+
+main();
+```
+
+### **resize**
+
+Curtail's resize method takes an image and resizes it, maintaining its aspect ratio by default.
+
+| param               | type    | description                                                                                              | default |
+|---------------------|---------|----------------------------------------------------------------------------------------------------------|---------|
+| src                 | string  | The path to the image                                                                                    |         |
+| dimension           | string  | The side you want to resize, width or height.                                                            |         |
+| size                | number  | The new size of the side to resize, in pixels.                                                           |         |
+| preserveAspectRatio | boolean | Indicates whether the width and height should resize together to preserve the aspect ratio of the image. | true    |
+
+Using `Promise.then`:
+
+```js
+// This will take an image (sized 1920x0180 in this example) and resize the width to
+// be 400 which will result in the image having a width of 400 and height of 225.
+curtail.resize('./path/to/image.png', 'width', 400).then((newImage) => {
+
+  // newImage will be your newly resized image and if autoDownload is set to true
+  // then you will have a local copy downloaded at this time.
+
+});
+
+```
+
+Using `async/await`:
+
+```js
+async function main() {
+
+  // This will take an image (sized 1920x0180 in this example) and resize the width to
+  // be 400 which will result in the image having a width of 400 and height of 225.
+  // You should probably use `try, catch`
+  const newImage = curtail.resize('./path/to/image.png', 'width', 400).catch((err) => console.log(err));
+
+  // newImage will be your newly resized image and if autoDownload is set to true
   // then you will have a local copy downloaded at this time.
 
 }
