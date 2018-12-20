@@ -1,10 +1,10 @@
 <p align="center">
-  <img width="250" height="250" src="./Curtail.png">
+  <img width="250" height="250" src="./curtail.png">
 </p>
 
 <h1 align="center">Curtail</h1>
 
-<p align="center">Curtail is a pure JavaScript in browser canvas-based image manipulation tool.<p>
+<p align="center">Curtail is a pure JavaScript image manipulation tool.<p>
 
 <div align="center">
   <a href="https://badge.fury.io/js/curtail"><img src="https://badge.fury.io/js/curtail.svg" alt="npm version" height="18"></a>
@@ -24,41 +24,16 @@ To download this module through npm, simply use the following command.
 $ npm install --save curtail
 ```
 
-and to use it, you can import it as an ES6 module:
+Curtail doesn't have a named export so to use it as an ES6 module use the following import:
 
 ```js
-import { Curtail } from './node_modules/curtail/curtail.js';
+import * as curtail from './node_modules/curtail/curtail.js';
 ```
 
-or reference the script:
+or reference the script from the dist folder:
 
 ```html
 <script src="./node_modules/curtail/dist/curtail.min.js">
-```
-
-## **Initialization**
-
-After referencing Curtail, a new instance can be created like below:
-
-```js
-const curtail = new Curtail();
-```
-
-Curtail does accept some optional parameters on initialization as highlighted below:
-
-| param        | type    | description                                                                     | default |
-|--------------|---------|---------------------------------------------------------------------------------|---------|
-| autoDownload | boolean | If set to true, the newly edited file will automatically be queued to download. | false   |
-| crossOrigin  | string  | Cross-origin property to set if the images are from a non-local source.         | null    |
-
-So let's say you would like your images to be downloaded after edits, you would initialize Curtail like:
-
-```js
-const options = {
-    autoDownload: true
-};
-
-const curtail = new Curtail(options);
 ```
 
 ## **API**
@@ -67,16 +42,18 @@ const curtail = new Curtail(options);
 
 ### **crop**
 
-Curtail's crop method lets you input an image, crop location, and crop dimensions and returns a newly cropped version
-of the original image.
+The crop method takes the path to an image, a crop start location, and the final dimensons of the image and returns the newly cropped version of the original image.
 
-| param  | type   | description                                     | default |
-|--------|--------|-------------------------------------------------|---------|
-| src    | string | The path to the image.                          |         |
-| x      | number | Where to begin cropping the image horizontally. |         |
-| y      | number | Where to begin cropping the image vertically.   |         |
-| width  | number | The width of the new image.                     |         |
-| height | number | The height of the new image.                    |         |
+| param                | type    | description                                                                        | default |
+|----------------------|---------|------------------------------------------------------------------------------------|---------|
+| path                 | string  | The path to the image to crop                                                      |         |
+| x                    | number  | The horizontal starting location of the crop                                       |         |
+| y                    | number  | The vertical starting location of the crop                                         |         |
+| width                | number  | The width of the cropped image                                                     |         |
+| height               | number  | The height of the cropped image                                                    |         |
+| options              | Object  |                                                                                    | {}      |
+| options.autoDownload | boolean | Indicates whether the image should download after the cropping is complete or not. | false   |
+| options.crossOrigin  | string  | Sets the cross-origin property of images originating from external sources.        | null    |
 
 Using `Promise.then`:
 
@@ -112,23 +89,24 @@ main();
 
 ### **convert**
 
-Curtail's convert method takes an image and converts it from one image format to another.
-
-Note that in order to normalize format input, the `format` parameter will have to be selected from the `curtail.FORMAT` object.
+The convert method takes an image and converts it from one image format to another.
 
 If you have a transparent image and convert it to a format that doesn't support transparency, the image will be placed on a white background.
 
-| param  | type           | description                                     | default |
-|--------|----------------|-------------------------------------------------|---------|
-| src    | string         | The path to the image.                          |         |
-| format | Curtail.FORMAT | Where to begin cropping the image horizontally. |         |
+| param                | type    | description                                                                        | default |
+|----------------------|---------|------------------------------------------------------------------------------------|---------|
+| path                 | string  | The path to the image to crop                                                      |         |
+| format               | string  | The new format for the image                                                       |         |
+| options              | Object  |                                                                                    | {}      |
+| options.autoDownload | boolean | Indicates whether the image should download after the cropping is complete or not. | false   |
+| options.crossOrigin  | string  | Sets the cross-origin property of images originating from external sources.        | null    |
 
 Using `Promise.then`:
 
 ```js
 // This will take an image and start cropping at (100, 100) and create a new image
 // with a width of 720x480.
-curtail.convert('./path/to/image.png', curtail.FORMAT.JPG).then((newImage) => {
+curtail.convert('./path/to/image.png', 'jpg').then((newImage) => {
 
   // newImage will be your newly converted image and if autoDownload is set to true
   // then you will have a local copy downloaded at this time.
@@ -145,7 +123,7 @@ async function main() {
   // This will take an image and start cropping at (100, 100) and create a new image
   // with a width of 720x480.
   // You should probably use `try, catch`
-  const newImage = curtail.convert('./path/to/image.png', curtail.FORMAT.JPG).catch((err) => console.log(err));
+  const newImage = curtail.convert('./path/to/image.png', 'jpg').catch((err) => console.log(err));
 
   // newImage will be your newly converted image and if autoDownload is set to true
   // then you will have a local copy downloaded at this time.
@@ -157,14 +135,17 @@ main();
 
 ### **resize**
 
-Curtail's resize method takes an image and resizes it, maintaining its aspect ratio by default.
+The resize method takes an image and resizes it, maintaining its aspect ratio by default.
 
-| param               | type    | description                                                                                              | default |
-|---------------------|---------|----------------------------------------------------------------------------------------------------------|---------|
-| src                 | string  | The path to the image                                                                                    |         |
-| dimension           | string  | The side you want to resize, width or height.                                                            |         |
-| size                | number  | The new size of the side to resize, in pixels.                                                           |         |
-| preserveAspectRatio | boolean | Indicates whether the width and height should resize together to preserve the aspect ratio of the image. | true    |
+| param                       | type    | description                                                                                                                                   | default |
+|-----------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------|---------|
+| path                        | string  | The path to the image to crop                                                                                                                 |         |
+| format                      | string  | Which dimension to resize, either width or height. Keep in mind that if you're preserving the aspect ratio, the other will resize accordingly |         |
+| size                        | number  | The new size to make the specified dimension                                                                                                  |         |
+| options                     | Object  |                                                                                                                                               | {}      |
+| options.preserveAspectRatio | boolean | Indicates whether the width and height will resize together to preserve the aspect ratio of the image                                         | true    |
+| options.autoDownload        | boolean | Indicates whether the image should download after the cropping is complete or not.                                                            | false   |
+| options.crossOrigin         | string  | Sets the cross-origin property of images originating from external sources.                                                                   | null    |
 
 Using `Promise.then`:
 
@@ -191,6 +172,49 @@ async function main() {
   const newImage = curtail.resize('./path/to/image.png', 'width', 400).catch((err) => console.log(err));
 
   // newImage will be your newly resized image and if autoDownload is set to true
+  // then you will have a local copy downloaded at this time.
+
+}
+
+main();
+```
+
+### **pad**
+
+The pad method takes an image and adds the specified amount of padding to it.
+
+| param                | type    | description                                                                                              | default       |
+|----------------------|---------|----------------------------------------------------------------------------------------------------------|---------------|
+| path                 | string  | The path to the image to crop                                                                            |               |
+| padding              | number  | The amount of padding to add to the image                                                                |               |
+| options              | Object  |                                                                                                          | {}            |
+| options.paddingColor | string  | The color that the padding will be. This value can be any valid CSS color value such as white or #FFFFFF | 'transparent' |
+| options.autoDownload | boolean | Indicates whether the image should download after the cropping is complete or not.                       | false         |
+| options.crossOrigin  | string  | Sets the cross-origin property of images originating from external sources.                              | null          |
+
+Using `Promise.then`:
+
+```js
+// This will take an image and add 20px of blue padding to all sides.
+curtail.pad('./path/to/image.png', 20, { paddingColor: 'blue' }).then((newImage) => {
+
+  // newImage will be your newly padded image and if autoDownload is set to true
+  // then you will have a local copy downloaded at this time.
+
+});
+
+```
+
+Using `async/await`:
+
+```js
+async function main() {
+
+  // This will take an image and add 20px of blue padding to all sides.
+  // You should probably use `try, catch`
+  const newImage = curtail.pad('./path/to/image.png', 20, { paddingColor: 'blue' }).catch((err) => console.log(err));
+
+  // newImage will be your newly padded image and if autoDownload is set to true
   // then you will have a local copy downloaded at this time.
 
 }

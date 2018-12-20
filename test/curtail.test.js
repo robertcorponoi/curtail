@@ -1,75 +1,128 @@
 'use strict'
 
-import { Curtail } from '../curtail.js';
-import * as extract from '../extract.js';
+import * as curtail from '../curtail.js';
 
-// Test the fucionality of Curtail's image manipulation features.
-describe('Curtail', () => {
+describe('Cropping an image', () => {
 
-  // Test the crop function which resizes images.
-  describe('#crop()', () => {
+  it('should crop an image starting at (200, 300) and end up with a new dimension of 450x540', async () => {
 
-    // The specified image should be cropped at the origin but with a new dimension of 300x400.
-    it('should crop an image at (0, 0) and result in a new dimension of 300x400', async () => {
+    try {
 
-      const curtail = new Curtail();
+      const crop = await curtail.crop('../test/wallpaper.png', 200, 300, 450, 540);
 
-      const crop = await curtail.crop('../test/wallpaper.png', 0, 0, 300, 400).catch((err) => console.log(err));
+      chai.expect({ width: crop.width, height: crop.height }).to.deep.equal({ width: 450, height: 540 });
 
-      const cropDimensions = { width: crop.width, height: crop.height };
+    }
+    catch (err) {
 
-      chai.expect(cropDimensions).to.deep.equal({ width: 300, height: 400 });
-
-    });
+      throw new Error(err);
+    }
 
   });
 
-  // Test the convert function which converts images between file types.
-  describe('#convert()', () => {
+});
 
-    // The specified image should be changed from wallpaper.png to wallpaper.jpg.
-    it('should convert the image from .png to .jpg', async () => {
+describe('Changing the format of an image', () => {
 
-      const curtail = new Curtail();
+  it('should convert an image from png to jpg', async () => {
 
-      const convert = await curtail.convert('../test/wallpaper.png', curtail.FORMAT.JPG);
+    try {
 
-    });
+      const convert = await curtail.convert('../test/skeleton.png', 'jpg');
+
+    }
+    catch (err) {
+
+      throw new Error(err);
+    }
 
   });
 
-  // Test the resize function which resizes images.
-  describe('#resize()', () => {
+});
 
-    // It sould resize the image's width and maintain the aspect ratio
-    it('it should resize the image\'s width maintaining the aspect ratio resulting in the image being 400x225', async () => {
+describe('Resizing an image', () => {
 
-      const curtail = new Curtail();
+  it('should resize the width of an image keeping the aspect ratio', async () => {
 
-      const resize = await curtail.resize('../test/1920x1080.png', 'width', 400).catch((err) => console.log(err));
+    try {
 
-      const expectedSize = { width: 400, height: 225 };
+      const resize = await curtail.resize('../test/1920x1080.png', 'width', 400);
 
-      const actualSize = { width: resize.width, height: resize.height };
+      chai.expect({ width: resize.width, height: resize.height }).to.deep.equal({ width: 400, height: 225 });
 
-      chai.expect(actualSize).to.deep.equal(expectedSize);
+    }
+    catch (err) {
 
-    });
+      throw new Error(err);
+    }
 
-    // It sould resize the image's height and maintain the aspect ratio
-    it('it should resize the image\'s height maintaining the aspect ratio resulting in the image being 400x225', async () => {
+  });
 
-      const curtail = new Curtail();
+  it('should resize the height of an image keeping the aspect ratio', async () => {
 
-      const resize = await curtail.resize('../test/1920x1080.png', 'height', 225).catch((err) => console.log(err));
+    try {
 
-      const expectedSize = { width: 400, height: 225 };
+      const resize = await curtail.resize('../test/1920x1080.png', 'height', 225);
 
-      const actualSize = { width: resize.width, height: resize.height };
+      chai.expect({ width: resize.width, height: resize.height }).to.deep.equal({ width: 400, height: 225 });
 
-      chai.expect(actualSize).to.deep.equal(expectedSize);
+    }
+    catch (err) {
 
-    });
+      throw new Error(err);
+    }
+
+  });
+
+  it('should resize the width of an image not keeping the aspect ratio', async () => {
+
+    try {
+
+      const resize = await curtail.resize('../test/1920x1080.png', 'width', 400, { preserveAspectRatio: false });
+
+      chai.expect({ width: resize.width, height: resize.height }).to.deep.equal({ width: 400, height: 1080 });
+
+    }
+    catch (err) {
+
+      throw new Error(err);
+    }
+
+  });
+
+  it('should resize the height of an image not keeping the aspect ratio', async () => {
+
+    try {
+
+      const resize = await curtail.resize('../test/1920x1080.png', 'height', 400, { preserveAspectRatio: false });
+
+      chai.expect({ width: resize.width, height: resize.height }).to.deep.equal({ width: 1920, height: 400 });
+
+    }
+    catch (err) {
+
+      throw new Error(err);
+    }
+
+  });
+
+});
+
+describe('Padding an image', () => {
+
+  it('should add 20px padding around the image', async () => {
+
+    try {
+
+      const resize = await curtail.pad('../test/1920x1080.png', 20, { paddingColor: 'white ' });
+
+      chai.expect({ width: resize.width, height: resize.height }).to.deep.equal({ width: 1960, height: 1120 });
+
+    }
+    catch (err) {
+
+      throw new Error(err);
+    }
 
   });
 

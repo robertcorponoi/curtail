@@ -1,7 +1,7 @@
 {
   "name": "curtail",
-  "version": "1.0.2",
-  "description": "Curtail is a pure JavaScript in browser canvas-based image manipulation tool.",
+  "version": "2.0.0",
+  "description": "Curtail is a pure JavaScript image manipulation tool.",
   "main": "curtail.js",
   "scripts": {
     "test": "node_modules/.bin/mocha"
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/robertcorponoi/curtail.git"
   },
   "keywords": [
-    "image", "crop", "format"
+    "image",
+    "crop",
+    "format"
   ],
   "author": "Robert Corponoi",
   "license": "MIT",

@@ -1,64 +1,51 @@
 'use strict'
 
 /**
- * The functions in extract deal with getting information from the
- * src path such as file name or file extension.
- * 
- * @since 1.0.0
- */
-
-/**
- * Extract the file name and extension from the provided src path.
+ * Extract the name of the file and the file's extension from the provided file path.
  * 
  * @since 1.0.0
  * 
- * @param {string} src The path to the image file.
+ * @param {string} path The user provided path to the image file.
  * 
- * @returns {Object} An object containing the file's name and extension.
+ * @returns {Object} Returns an object with the file name and extension as properties and the results as the values.
  */
-function getFileInfo(src) {
+export function extractFileInfo(path) {
 
   let nameIndex = 0;
   let extIndex = 0;
 
-  let fileInfo = {
-    name: null,
-    ext: null
-  };
+  const fileInfo = { name: null, ext: null };
 
-  if (src.lastIndexOf('/') > -1) nameIndex = src.lastIndexOf('/');
+  if (path.lastIndexOf('/') > -1) {
 
-  extIndex = src.lastIndexOf('.');
+    nameIndex = path.lastIndexOf('/');
 
-  fileInfo.name = src.slice(nameIndex + 1, extIndex);
-  fileInfo.ext = src.slice(extIndex + 1);
+  }
+
+  extIndex = path.lastIndexOf('.');
+
+  fileInfo.name = path.slice(nameIndex + 1, extIndex);
+  fileInfo.ext = path.slice(extIndex + 1);
 
   return fileInfo;
 
 }
 
 /**
- * The functions in math deal with any mathematical operations not
- * supported by native JavaScript.
- * 
- * @since 0.1.0
- */
-
-/**
- * Simplify a fraction using the greatest common divisor.
+ * Simplify a fraction by using the greatest common divisor method.
  * 
  * @since 0.1.0
  * 
- * @param {number} numerator The top number of the original fraction.
- * @param {number} denominator The bottom number of the original fraction.
+ * @param {number} numerator The top number of the fraction to simplify.
+ * @param {number} denominator The bottom number of the fraction to simplify.
  * 
- * @returns {Array} An array consisting of the two values representing the numerator and denominator of the simplified fraction.
+ * @returns {Object} Returns an object with the numerator/denominator as properties and the simplified results as the values.
  */
-function simplify(numerator, denominator) {
+export function simplify(numerator, denominator) {
 
-  const num = gcd(numerator, denominator);
+  const divisor = gcd(numerator, denominator);
 
-  return [numerator / num, denominator / num];
+  return { numerator: numerator / divisor, denominator: denominator / divisor };
 
 }
 
@@ -67,287 +54,401 @@ function simplify(numerator, denominator) {
  * 
  * @since 0.1.0
  * 
- * @param {number} a The first number.
- * @param {number} b The second number.
+ * @param {number} num1 The first number.
+ * @param {number} num2 The second number.
  * 
- * @returns {number} The GCD between the two numbers.
+ * @returns {number} Returns the greatest common divisor between the two numbers.
  */
-function gcd(a, b) {
+function gcd(num1, num2) {
 
-  while (b !== 0) {
+  while (num2 !== 0) {
 
-    let temp = a;
+    let temp = num1;
 
-    a = b;
+    num1 = num2;
 
-    b = temp % b;
+    num2 = temp % num2;
 
   }
 
-  return a;
+  return num1;
 
 }
 
 /**
- * Curtail is a pure JavaScript in browser canvas-based image manipulation tool.
+ * Crop an image to a specified size by providing the start location of the crop and
+ * the dimensions that the product should have.
  * 
  * @since 0.1.0
+ * 
+ * @param {string} path The path to the image to crop.
+ * @param {number} x The horizontal location in the original image to begin the crop.
+ * @param {number} y The vertical location in the original image to being the crop.
+ * @param {number} width The width of the final cropped image.
+ * @param {number} height The height of of the final cropped image.
+ * @param {Object} [options]
+ * @param {boolean} [options.autoDownload=false] Indicates whether the image should download after the cropping is complete or not.
+ * @param {string} [options.crossOrigin=null] Sets the cross-origin property of images originating from external sources.
+ * 
+ * @returns {Promize<HTMLImageElement>} Returns the newly cropped image as an image element.
  */
-export class Curtail {
+export function crop(path, x, y, width, height, options = {}) {
 
-  /**
-   * @param {Object} [options] Options used to alter the functionality of Curtail.
-   * @param {boolean} [autoDownload=false] Indicates whether the new image will be queued to download automatically after it is transformed.
-   * @param {string} [crossOrigin=null] Set a cross-origin property for images loaded from non-local sources.
-   */
-  constructor(options = {}) {
+  const _options = Object.assign({
 
-    /**
-     * Combine the user options with the defaults for any options not set.
-     * 
-     * @prop {Object}
-     * @readonly
-     */
-    this._options = Object.assign({
+    autoDownload: false,
 
-      /**
-       * Indicates whether the image should auto-download after the edit.
-       * 
-       * @prop {boolean}
-       */
-      autoDownload: false,
+    crossOrigin: null
 
-      /**
-       * Sets a cross-origin property for the images used.
-       * 
-       * @prop {string}
-       */
-      crossOrigin: null
+  }, options);
 
-    }, options);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
 
-    /**
-     * Used when converting an image to another format, it has to be from the
-     * following supported formats.
-     * 
-     * @prop {Object}
-     */
-    this.FORMAT = {
+  const fileInfo = utils.extractFileInfo(path);
 
-      PNG: { ext: 'png', transparent: true },
+  const originalImage = new Image();
 
-      JPG: { ext: 'jpg', transparent: false },
+  return new Promise((resolve, reject) => {
 
-      GIF: { ext: 'gif', transparent: false },
+    originalImage.addEventListener('load', function loadImage() {
 
-      BMP: { ext: 'bmp', transparent: false },
+      canvas.width = width;
+      canvas.height = height;
 
-      WEBP: { ext: 'webp', transparent: true },
+      ctx.drawImage(originalImage, x, y, width, height, 0, 0, width, height);
 
-      PDF: { ext: 'pdf', transparent: true },
+      const croppedImage = new Image();
 
-    };
+      croppedImage.addEventListener('load', function loadCroppedImage() {
 
-  }
+        if (_options.autoDownload) {
 
-  /**
-   * Crop an image down to a specified size by providing the location to being cropping
-   * the image and the dimensions of the new desired image.
-   * 
-   * @since 0.1.0
-   * 
-   * @param {string} src The path to the image to crop.
-   * @param {number} x The x location in the original image to begin the crop.
-   * @param {number} y The y location in the original image to begin the crop.
-   * @param {number} width The desired width for the cropped image.
-   * @param {number} height The desired height for the cropped image.
-   * 
-   * @returns {Promise<HTMLImageElement>} The newly cropped image.
-   */
-  crop(src, x, y, width, height) {
+          const imageLink = document.createElement('a');
 
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+          imageLink.href = croppedImage.src;
+          imageLink.download = fileInfo.name + '.' + fileInfo.ext;
 
-    const nameIndex = src.lastIndexOf('/') + 1 || 0;
-    const extIndex = src.lastIndexOf('.');
-
-    const srcName = src.slice(nameIndex, extIndex);
-    const srcExt = src.slice(extIndex + 1);
-
-    const originalImage = new Image();
-
-    return new Promise((resolve, reject) => {
-
-      originalImage.onload = () => {
-
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx.drawImage(originalImage, x, y, width, height, 0, 0, width, height);
-
-        const croppedImage = new Image();
-
-        croppedImage.onload = () => {
-
-          if (this._options.autoDownload) {
-
-            let img = document.createElement('a');
-
-            img.href = croppedImage.src;
-            img.download = srcName + '.' + srcExt;
-
-            img.click();
-
-          }
-
-          resolve(croppedImage);
+          imageLink.click();
 
         }
 
-        croppedImage.onerror = (err) => reject(err);
+        croppedImage.removeEventListener('load', loadCroppedImage);
 
-        croppedImage.src = canvas.toDataURL(`image/${srcExt}`).replace(`image/${srcExt}`, 'image/octet-stream');
+        resolve(croppedImage);
 
-      };
+      });
 
-      originalImage.onerror = (err) => reject(err);
+      croppedImage.addEventListener('error', function loadCroppedImageError(err) {
 
-      originalImage.src = src;
-      if (this._options.crossOrigin) originalImage.crossOrigin = this._options.crossOrigin;
+        croppedImage.removeEventListener('error', loadCroppedImage);
+
+        reject(err);
+
+      });
+
+      croppedImage.src = canvas.toDataURL(`image/${fileInfo.ext}`).replace(`image/${fileInfo.ext}`, 'image/octet-stream');
 
     });
 
-  }
+    originalImage.addEventListener('error', function loadImageError(err) {
 
-  /**
-   * Convert an image from one format to another format, eg png to jpg.
-   * 
-   * @since 1.0.0
-   * 
-   * @param {string} src The path to the image to convert.
-   * @param {FORMAT} format The format, from the `curtail.FORMAT` object to convert the image to.
-   * 
-   * @returns {Promise<HTMLImageElement>} The newly converted image.
-   */
-  convert(src, format) {
+      originalImage.removeEventListener('error', loadImageError);
 
-    const fileInfo = extract.getFileInfo(src);
-
-    if (fileInfo.ext === format.ext) {
-
-      console.warn('Image is already in desired format.');
-      return;
-
-    }
-
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-
-    const originalImage = new Image();
-
-    return new Promise((resolve, reject) => {
-
-      originalImage.onload = () => {
-
-        canvas.width = originalImage.width;
-        canvas.height = originalImage.height;
-
-        if (!format.transparent) {
-
-          ctx.fillStyle = '#FFF';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        }
-
-        ctx.drawImage(originalImage, 0, 0);
-
-        const newImage = new Image();
-
-        newImage.onload = () => {
-
-          if (this._options.autoDownload) {
-
-            let img = document.createElement('a');
-
-            img.href = newImage.src;
-            img.download = fileInfo.name + '.' + format.ext;
-
-            img.click();
-
-          }
-
-          resolve(newImage);
-
-        };
-
-        newImage.onerror = (err) => reject(err);
-
-        newImage.src = canvas.toDataURL(`image/${format.ext}`);
-
-      };
-
-      originalImage.onerror = (err) => reject(err);
-
-      originalImage.src = src;
-      if (this._options.crossOrigin) originalImage.crossOrigin = this._options.crossOrigin;
+      reject(err);
 
     });
 
-  }
+    originalImage.src = path;
 
-  /**
-   * Resize an image.
-   * 
-   * The aspect ratio is automatically preserved when resizing an image unless
-   * the `preserveAspectRatio` parameter is set to false.
-   * 
-   * @since 0.1.0
-   * 
-   * @param {string} src The path to the image to convert.
-   * @param {string} dimsension Whether you want to resize the width or height of the image.
-   * @param {number} size The new size to make the specified dimension in pixels.
-   * @param {boolean} [preserveAspectRatio=true] Indicates whether the width and height should resize together to preserve the aspect ratio of the image.
-   * 
-   * @returns {Promise<HTMLImageElement>} The newly resized image.
-   */
-  resize(src, dimension, size, preserveAspectRatio = true) {
+    if (_options.crossOrigin) originalImage.crossOrigin = _options.crossOrigin;
 
-    const image = new Image();
+  });
 
-    return new Promise((resolve, reject) => {
+}
 
-      image.onload = () => {
+/**
+ * Convert an image from one format to another format.
+ * 
+ * @since 1.0.0
+ * 
+ * @param {string} path The path to the image to convert to another format.
+ * @param {string} format The new format for the image.
+ * @param {Object} [options]
+ * @param {boolean} [options.autoDownload=false] Indicates whether the image should download after the cropping is complete or not.
+ * @param {string} [options.crossOrigin=null] Sets the cross-origin property of images originating from external sources.
+ * 
+ * @returns {Promise<HTMLImageElement>} Returns the newly formatted image as an image element.
+ */
+export function convert(path, format, options = {}) {
 
-        const aspectRatio = math.simplify(image.width, image.height);
+  const _options = Object.assign({
 
-        if (dimension === 'width') {
+    autoDownload: false,
 
-          image.width = size;
+    crossOrigin: null
 
-          if (preserveAspectRatio) image.height = Math.round((aspectRatio[1] / aspectRatio[0]) * size);
+  }, options);
+
+  const nonTransparentFormats = ['jpg', 'jpeg', 'gif', 'bmp'];
+
+  const fileInfo = utils.extractFileInfo(path);
+
+  if (fileInfo.ext === format) return;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const originalImage = new Image();
+
+  return new Promise((resolve, reject) => {
+
+    originalImage.addEventListener('load', function loadImage() {
+
+      canvas.width = originalImage.width;
+      canvas.height = originalImage.height;
+
+      if (nonTransparentFormats.includes(format)) {
+
+        ctx.fillStyle = '#FFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      }
+
+      ctx.drawImage(originalImage, 0, 0);
+
+      const convertedImage = new Image();
+
+      convertedImage.addEventListener('load', function loadConvertedImage() {
+
+        if (_options.autoDownload) {
+
+          const imageLink = document.createElement('a');
+
+          imageLink.href = convertedImage.src;
+          imageLink.download = fileInfo.name + '.' + format;
+
+          imageLink.click();
 
         }
 
-        else if (dimension === 'height') {
+        convertedImage.removeEventListener('load', loadConvertedImage);
 
-          image.height = size;
+        resolve(convertedImage);
 
-          if (preserveAspectRatio) image.width = Math.round((aspectRatio[0] / aspectRatio[1]) * size);
+      });
 
-        }
+      convertedImage.addEventListener('error', function loadConvertedImageError(err) {
 
-        resolve(image);
+        convertedImage.removeEventListener('load', loadConvertedImageError);
 
-      };
+        reject(err);
 
-      image.onerror = (err) => reject(err);
+      });
 
-      image.src = src;
-      if (this._options.crossOrigin) image.crossOrigin = this._options.crossOrigin;
+      convertedImage.src = canvas.toDataURL(`image/${format}`);
+
+      originalImage.removeEventListener('load', loadImage);
 
     });
 
-  }
+    originalImage.addEventListener('error', function loadImageError(err) {
+
+      originalImage.removeEventListener('load', loadImageError);
+
+      reject(err);
+
+    });
+
+    originalImage.src = path;
+
+    if (_options.crossOrigin) originalImage.crossOrigin = _options.crossOrigin;
+
+  });
+
+}
+
+/**
+ * Resize an image to a new dimension.
+ * 
+ * @since 1.0.0
+ * 
+ * @param {string} path The path to the image to resize.
+ * @param {string} dimension Which dimension to resize, either width or height. Keep in mind that if you're preserving the aspect ratio, the other will resize accordingly.
+ * @param {number} size The new size to make the specified dimension.
+ * @param {Object} [options]
+ * @param {boolean} [options.preserveAspectRatio=true] Indicates whether the width and height will resize together to preserve the aspect ratio of the image.
+ * @param {boolean} [options.autoDownload=false] Indicates whether the image should download after the cropping is complete or not.
+ * @param {string} [options.crossOrigin=null] Sets the cross-origin property of images originating from external sources.
+ * 
+ * @returns {Promise<HTMLImageElement>} Returns the newly resized image as an image element.
+ */
+export function resize(path, dimension, size, options = {}) {
+
+  const _options = Object.assign({
+
+    preserveAspectRatio: true,
+
+    autoDownload: false,
+
+    crossOrigin: null
+
+  }, options);
+
+  const originalImage = new Image();
+
+  return new Promise((resolve, reject) => {
+
+    originalImage.addEventListener('load', function loadImage() {
+
+      const aspectRatio = utils.simplify(originalImage.width, originalImage.height);
+
+      if (dimension === 'width') {
+
+        originalImage.width = size;
+
+        if (_options.preserveAspectRatio) originalImage.height = Math.round((aspectRatio.denominator / aspectRatio.numerator) * size);
+
+      }
+      else if (dimension === 'height') {
+
+        originalImage.height = size;
+
+        if (_options.preserveAspectRatio) originalImage.width = Math.round((aspectRatio.numerator / aspectRatio.denominator) * size);
+
+      }
+
+      originalImage.removeEventListener('load', loadImage);
+
+      if (_options.autoDownload) {
+
+        const imageLink = document.createElement('a');
+
+        imageLink.href = convertedImage.src;
+        imageLink.download = fileInfo.name + '.' + format;
+
+        imageLink.click();
+
+      }
+
+      resolve(originalImage);
+
+    });
+
+    originalImage.addEventListener('error', function loadImageError(err) {
+
+      originalImage.removeEventListener('error', loadImageError);
+
+      reject(err);
+
+    });
+
+    originalImage.src = path;
+
+    if (_options.crossOrigin) originalImage.crossOrigin = _options.crossOrigin;
+
+  });
+
+}
+
+/**
+ * Adds the specified amount of padding around an image.
+ * 
+ * Note that the padding will not be even on images that are not square.
+ * 
+ * @since 2.0.0
+ * 
+ * @param {string} path The path to the image to add padding to.
+ * @param {number} padding The amount of padding to add to the image.
+ * @param {Object} [options]
+ * @param {string} [options.paddingColor='transparent'] The color that the padding will be. This value can be any valid CSS color value such as white or #FFFFFF.
+ * @param {boolean} [options.autoDownload=false] Indicates whether the image should download after the cropping is complete or not.
+ * @param {string} [options.crossOrigin=null] Sets the cross-origin property of images originating from external sources.
+ * 
+ * @returns {Promise<HTMLImageElement>} Returns the newly padded image as an image element.
+ */
+export function pad(path, padding, options = {}) {
+
+  const _options = Object.assign({
+
+    paddingColor: 'transparent',
+
+    autoDownload: false,
+
+    crossOrigin: null
+
+  }, options);
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const fileInfo = utils.extractFileInfo(path);
+
+  const originalImage = new Image();
+
+  return new Promise((resolve, reject) => {
+
+    originalImage.addEventListener('load', function loadImage() {
+
+      canvas.width = originalImage.width + (padding * 2);
+      canvas.height = originalImage.height + (padding * 2);
+
+      if (_options.paddingColor !== 'transparent') {
+        
+        ctx.fillStyle = _options.paddingColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      }
+
+      ctx.drawImage(originalImage, canvas.width / 2 - originalImage.width / 2, canvas.height / 2 - originalImage.height / 2, originalImage.width, originalImage.height);
+
+      const paddedImage = new Image();
+
+      paddedImage.addEventListener('load', function loadPaddedImage() {
+
+        if (_options.autoDownload) {
+
+          const imageLink = document.createElement('a');
+
+          imageLink.href = paddedImage.src;
+          imageLink.download = fileInfo.name + '.' + format;
+
+          imageLink.click();
+
+        }
+
+        paddedImage.removeEventListener('load', loadPaddedImage);
+
+        resolve(paddedImage);
+
+      });
+
+      paddedImage.addEventListener('error', function loadPaddedImageError(err) {
+
+        paddedImage.removeEventListener('load', loadPaddedImageError);
+
+        reject(err);
+
+      });
+
+      paddedImage.src = canvas.toDataURL(`image/${fileInfo.ext}`);
+
+      originalImage.removeEventListener('load', loadImage);
+
+    });
+
+    originalImage.addEventListener('error', function loadImageError(err) {
+
+      originalImage.removeEventListener('error', loadImageError);
+
+      reject(err);
+
+    });
+
+    originalImage.src = path;
+
+    if (_options.crossOrigin) originalImage.crossOrigin = _options.crossOrigin;
+
+  });
 
 }

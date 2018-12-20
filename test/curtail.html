@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Mocha Tests</title>
+  <title>Curtail Tests</title>
 
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
 </head>
@@ -14,13 +14,17 @@
 
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
+
   <script>mocha.setup('bdd')</script>
 
   <script type="module" src="../test/curtail.test.js"></script>
 
   <script type="module">
+
     mocha.checkLeaks();
+
     mocha.run();
+
   </script>
 </body>
 
