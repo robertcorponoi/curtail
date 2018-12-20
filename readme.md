@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="./curtail.png">
+  <img width="250" height="250" src="./Curtail.png">
 </p>
 
 <h1 align="center">Curtail</h1>
