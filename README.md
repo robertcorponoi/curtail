@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="./Curtail.png">
+  <img width="250" height="250" src="./curtail.png">
 </p>
 
 <h1 align="center">Curtail</h1>
@@ -13,30 +13,37 @@
   <a href="https://badge.fury.io/js/curtail"><img src="https://img.shields.io/github/license/robertcorponoi/curtail.svg" alt="license" height="18"></a>
 </div>
 
-
-**Note:** Curtail is still in its early stages and as such has limited functionality. Make sure to check back every now and again for exciting new features!
+**Note:** This documentation is for Curtail 3.0, the most recent version of Curtail which reflects some API changes.
 
 ## **Installation**
 
-To download this module through npm, simply use the following command.
+To download Curtail through npm, simply use the following command:
 
 ```
-$ npm install --save curtail
+$ npm install curtail
 ```
 
-Curtail doesn't have a named export so to use it as an ES6 module use the following import:
+Curtail doesn't have a named export so you can import the specific modules you need or all of them like so:
 
 ```js
 import * as curtail from './node_modules/curtail/curtail.js';
 ```
 
-or reference the script from the dist folder:
+## **Modules**
 
-```html
-<script src="./node_modules/curtail/dist/curtail.min.js">
-```
+The available modules within Curtail are:
 
-## **API**
+* [**Transform**](#transform): The transform methods are used to change the image size, format, and other 'physical' properties.
+  * [crop](#crop): Crops an image to a specified dimensions from a starting point.
+  * [convert](#convert): Converts an image from one format to another.
+  * [resize](#resize): Resizes an image with the option of keeping the aspect ratio.
+
+* [**Decorate**](#decorate): Contains methods that to add decorative features to images.
+  * [pad](#pad): Adds a padding of your color around the image. It could also be thought of as a border.
+
+## **Transform**
+
+The transform methods are used to change the image size, format, and other 'physical' properties.
 
 **Note:** As loading of images is an asynchoronous action, all of Curtail's methods return a Promise which you can use either `then` or `await` as shown in the examples below.
 
@@ -178,6 +185,10 @@ async function main() {
 
 main();
 ```
+
+## **Decorate**
+
+Contains methods to add decorative features to images.
 
 ### **pad**
 
