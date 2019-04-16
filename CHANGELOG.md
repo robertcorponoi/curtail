@@ -1,3 +1,9 @@
+3.0.2 2019-04-16
+==================
+* Updated packages to latest versions. This fixed a security vulnerability with the mocha package.
+* Updated year in LICENSE
+* Removed redundant parts of .tsconfig
+
 3.0.0 2019-03-16
 ==================
 
