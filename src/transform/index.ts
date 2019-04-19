@@ -2,6 +2,7 @@
 
 import { crop } from './crop';
 import { resize } from './resize';
+import { rotate } from './rotate';
 import { convert } from './convert';
 
 /**
@@ -12,4 +13,4 @@ import { convert } from './convert';
  * 
  * @version 0.1.0
  */
-export { crop, convert, resize };
+export { crop, convert, resize, rotate };

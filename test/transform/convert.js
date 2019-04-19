@@ -1,6 +1,6 @@
 'use strict'
 
-import * as curtail from '../../curtail.js';
+import * as curtail from '../curtail.js';
 
 describe('Converting Images', () => {
 
