@@ -7,32 +7,36 @@ const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 export default {
 
-	input: './src/index.ts',
+  input: './src/index.ts',
 
-	external: [],
+  external: [],
 
-	plugins: [
+  plugins: [
 
-		resolve({ extensions }),
+    resolve({ extensions }),
 
-		commonjs(),
+    commonjs(),
 
-		babel({
+    babel({
 
-			extensions,
+      extensions,
 
-			include: ['src/**/*'],
+      include: ['src/**/*'],
 
-			runtimeHelpers: true
+      runtimeHelpers: true
 
-		}),
+    }),
 
-	],
+  ],
 
-	output: [
-		{
-			file: pkg.module,
-			format: 'esm',
+  output: [
+    {
+      file: pkg.module,
+      format: 'esm',
 
-		}],
+    },
+    {
+      file: './test/' + pkg.module,
+      format: 'esm'
+    }],
 };

@@ -1,5 +1,5 @@
 import { pad } from './decorate/pad';
-import { crop, convert, resize } from './transform/index';
+import { crop, convert, resize, rotate } from './transform/index';
 /**
  * Exports all of the methods available for Curtail from every file that
  * contains them.
@@ -8,4 +8,4 @@ import { crop, convert, resize } from './transform/index';
  *
  * @version 0.1.0
  */
-export { pad, crop, convert, resize };
+export { pad, crop, convert, resize, rotate };

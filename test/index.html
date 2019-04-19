@@ -1,35 +1,44 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
+
   <meta charset="utf-8">
 
   <title>Curtail Tests</title>
 
-  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
+
 </head>
 
 <body>
+
   <div id="mocha"></div>
 
-  <script src="../node_modules/mocha/mocha.js"></script>
-  <script src="../node_modules/chai/chai.js"></script>
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
 
-  <script>mocha.setup('bdd')</script>
+  <script class="mocha-init" type="module">
 
-  <script type="module" src="../test/decorate/pad.js"></script>
-
-  <script type="module" src="../test/transform/crop.js"></script>
-  <script type="module" src="../test/transform/convert.js"></script>
-  <script type="module" src="../test/transform/resize.js"></script>
-
-  <script type="module">
-
+    mocha.setup('bdd');
     mocha.checkLeaks();
+
+  </script>
+
+  <script type="module" src="./decorate/pad.js"></script>
+
+  <script type="module" src="./transform/crop.js"></script>
+  <script type="module" src="./transform/convert.js"></script>
+  <script type="module" src="./transform/resize.js"></script>
+  <script type="module" src="./transform/rotate.js"></script>
+
+  <script class="mocha-exec" type="module">
 
     mocha.run();
 
   </script>
+
 </body>
 
 </html>
