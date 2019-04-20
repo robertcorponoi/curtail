@@ -1,3 +1,9 @@
+3.1.0 2091-04-19
+==================
+* Added rotate functionality to the transform API.
+* Changed tests to use Mocha and Chai from CDN.
+* Removed Mocha and Chai dev dependencies.
+
 3.0.2 2019-04-16
 ==================
 * Updated packages to latest versions. This fixed a security vulnerability with the mocha package.
