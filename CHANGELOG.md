@@ -1,4 +1,9 @@
-3.1.0 2091-04-19
+3.1.1 2010-06-09
+==================
+* Updated all dependencies to their latest versions
+* Tested dependency updates to make sure all functionality remains the same.
+
+3.1.0 2019-04-19
 ==================
 * Added rotate functionality to the transform API.
 * Changed tests to use Mocha and Chai from CDN.
@@ -29,5 +34,4 @@
 
 0.1.0
 ==================
-
 * Initial Release
