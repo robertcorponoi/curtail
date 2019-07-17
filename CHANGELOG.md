@@ -1,4 +1,8 @@
-3.1.1 2010-06-09
+3.1.2 2019-07-17
+==================
+* [HOTFIX] Updated all dev dependencies to their latest versions and fixed any security vulnerabilities found in them.
+
+3.1.1 2019-06-09
 ==================
 * Updated all dependencies to their latest versions
 * Tested dependency updates to make sure all functionality remains the same.
