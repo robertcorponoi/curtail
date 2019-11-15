@@ -1,3 +1,7 @@
+3.1.4 / 2019-11-14
+==================
+* [MISC] Updated all dependencies to their latest versions.
+
 3.1.3 / 2019-10-12
 ==================
 * [FEATURE] Updated all dependencies to their latest versions.
