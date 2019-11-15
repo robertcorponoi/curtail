@@ -1,19 +1,9 @@
 'use strict'
 
-/// <reference path="../interfaces/Fraction.ts" />
-
-/**
- * Contains math methods not available from the standard JavaScript library.
- * 
- * @author Robert Corponoi
- * 
- * @version 2.0.0
- */
+import Fraction from '../interfaces/Fraction';
 
 /**
  * Simplify a fraction by using the greatest common divisor method.
- * 
- * @since 0.1.0
  * 
  * @param {number} numerator The top number of the fraction to simplify.
  * @param {number} denominator The bottom number of the fraction to simplify.
@@ -31,15 +21,7 @@ export function simplify(numerator: number, denominator: number): Fraction {
 }
 
 /**
- * 
- * @param num1 
- * @param num2 
- */
-
-/**
  * Find the greatest common divisor between two numbers.
- * 
- * @since 0.1.0
  * 
  * @param {number} num1 The first number.
  * @param {number} num2 The second number.

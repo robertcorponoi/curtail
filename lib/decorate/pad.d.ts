@@ -3,8 +3,6 @@
  *
  * Note that the padding will not be even on images that are not square.
  *
- * @since 2.0.0
- *
  * @param {string} path The path to the image to add padding to.
  * @param {number} padding The amount of padding to add to the image.
  * @param {Object} [options]

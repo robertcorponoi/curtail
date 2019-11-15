@@ -1,8 +1,6 @@
 /**
  * Resize an image to a new dimension.
  *
- * @since 1.0.0
- *
  * @param {string} path The path to the image to resize.
  * @param {string} dimension Which dimension to resize, either width or height. Keep in mind that if you're preserving the aspect ratio, the other will resize accordingly.
  * @param {number} size The new size to make the specified dimension.

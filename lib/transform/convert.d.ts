@@ -1,8 +1,6 @@
 /**
  * Convert an image from one format to another format.
  *
- * @since 1.0.0
- *
  * @param {string} path The path to the image to convert to another format.
  * @param {string} format The new format for the image.
  * @param {Object} [options]

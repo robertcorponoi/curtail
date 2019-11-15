@@ -4,17 +4,11 @@ import GeneralOptions from './GeneralOptions';
 
 /**
  * Extends the GeneralOptions object for pad specific options.
- * 
- * @author Robert Corponoi <robertcorponoi@gmail.com>
- * 
- * @version 0.1.0
  */
 export default class PadOptions extends GeneralOptions {
 
 	/**
 	 * The color that the padding will be.
-	 * 
-	 * @since 0.1.0
 	 * 
 	 * @property {string}
 	 * 

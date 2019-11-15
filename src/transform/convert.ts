@@ -1,6 +1,6 @@
 'use strict'
 
-/// <reference path="../interfaces/FileInfo.ts" />
+import FileInfo from '../interfaces/FileInfo';
 
 import { loadImage } from '../utils/load';
 import { extractFileInfo } from '../utils/file';
@@ -9,8 +9,6 @@ import GeneralOptions from '../options/GeneralOptions';
 
 /**
  * Convert an image from one format to another format.
- * 
- * @since 1.0.0
  * 
  * @param {string} path The path to the image to convert to another format.
  * @param {string} format The new format for the image.

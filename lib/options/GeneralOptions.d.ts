@@ -1,17 +1,9 @@
 /**
- * Defines the structure of the general options that are applied to most of the
- * Curtail functions.
- *
- * @author Robert Corponoi <robertcorponoi@gmail.com>
- *
- * @version 0.1.0
+ * Defines the structure of the general options that are applied to most of the Curtail functions.
  */
 export default class GeneralOptions {
     /**
-     * Indicates whether the image should download after the operation is complete
-     * or not.
-     *
-     * @since 0.1.0
+     * Indicates whether the image should download after the operation is complete  or not.
      *
      * @property {boolean}
      *
@@ -19,10 +11,7 @@ export default class GeneralOptions {
      */
     autodownload: boolean;
     /**
-     * Sets the cross-origin property of the image if originating from an external
-     * source.
-     *
-     * @since 0.1.0
+     * Sets the cross-origin property of the image if originating from an external source.
      *
      * @property {string}
      *
