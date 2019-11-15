@@ -1,6 +1,6 @@
 {
   "name": "curtail",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "description": "Curtail is a pure JavaScript image manipulation tool.",
   "module": "curtail.js",
   "scripts": {

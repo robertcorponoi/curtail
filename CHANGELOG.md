@@ -1,3 +1,8 @@
+3.1.5 / 2019-11-14
+==================
+* [MISC] Updated the interfaces from references to imports.
+* [MISC] Removed unnecessary jsdoc comments.
+
 3.1.4 / 2019-11-14
 ==================
 * [MISC] Updated all dependencies to their latest versions.

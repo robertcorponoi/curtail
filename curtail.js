@@ -732,65 +732,6 @@ try {
 
 var regenerator = runtime_1;
 
-function loadImage(path, crossOrigin) {
-  var image;
-  return regenerator.async(function loadImage$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          image = new Image();
-          return _context.abrupt("return", new Promise(function (resolve, reject) {
-            image.addEventListener('load', function () {
-              resolve(image);
-            });
-            image.addEventListener('error', function (error) {
-              reject(error);
-            });
-            image.src = path;
-            if (crossOrigin) image.crossOrigin = crossOrigin;
-          }));
-
-        case 2:
-        case "end":
-          return _context.stop();
-      }
-    }
-  });
-}
-
-/**
- * Utility methods that extract file names and information from image
- * files.
- * 
- * @author Robert Corponoi
- * 
- * @version 2.0.0
- */
-
-/**
- * Extract the name of the file and the file's extension from the provided file path.
- * 
- * @since 1.0.0
- * 
- * @param {string} path The user provided path to the image file.
- * 
- * @returns {Object} Returns an object with the file name and extension as properties and the results as the values.
- */
-
-function extractFileInfo(path) {
-  var nameIndex = 0;
-  var extIndex = 0;
-  var fileInfo = {
-    name: '',
-    ext: ''
-  };
-  if (path.lastIndexOf('/') > -1) nameIndex = path.lastIndexOf('/');
-  extIndex = path.lastIndexOf('.');
-  fileInfo.name = path.slice(nameIndex + 1, extIndex);
-  fileInfo.ext = path.slice(extIndex + 1);
-  return fileInfo;
-}
-
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -899,10 +840,7 @@ var defineProperty = _defineProperty;
 
 var GeneralOptions =
 /**
- * Indicates whether the image should download after the operation is complete 
- * or not.
- * 
- * @since 0.1.0
+ * Indicates whether the image should download after the operation is complete  or not.
  * 
  * @property {boolean}
  * 
@@ -910,10 +848,7 @@ var GeneralOptions =
  */
 
 /**
- * Sets the cross-origin property of the image if originating from an external
- * source.
- * 
- * @since 0.1.0
+ * Sets the cross-origin property of the image if originating from an external source.
  * 
  * @property {string}
  * 
@@ -935,10 +870,6 @@ function GeneralOptions(options) {
 
 /**
  * Extends the GeneralOptions object for pad specific options.
- * 
- * @author Robert Corponoi <robertcorponoi@gmail.com>
- * 
- * @version 0.1.0
  */
 
 var PadOptions =
@@ -948,8 +879,6 @@ function (_GeneralOptions) {
 
   /**
    * The color that the padding will be.
-   * 
-   * @since 0.1.0
    * 
    * @property {string}
    * 
@@ -975,12 +904,57 @@ function (_GeneralOptions) {
   return PadOptions;
 }(GeneralOptions);
 
+function loadImage(path, crossOrigin) {
+  var image;
+  return regenerator.async(function loadImage$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          image = new Image();
+          return _context.abrupt("return", new Promise(function (resolve, reject) {
+            image.addEventListener('load', function () {
+              resolve(image);
+            });
+            image.addEventListener('error', function (error) {
+              reject(error);
+            });
+            image.src = path;
+            if (crossOrigin) image.crossOrigin = crossOrigin;
+          }));
+
+        case 2:
+        case "end":
+          return _context.stop();
+      }
+    }
+  });
+}
+
+/**
+ * Extract the name of the file and the file's extension from the provided file path.
+ * 
+ * @param {string} path The user provided path to the image file.
+ * 
+ * @returns {Object} Returns an object with the file name and extension as properties and the results as the values.
+ */
+function extractFileInfo(path) {
+  var nameIndex = 0;
+  var extIndex = 0;
+  var fileInfo = {
+    name: '',
+    ext: ''
+  };
+  if (path.lastIndexOf('/') > -1) nameIndex = path.lastIndexOf('/');
+  extIndex = path.lastIndexOf('.');
+  fileInfo.name = path.slice(nameIndex + 1, extIndex);
+  fileInfo.ext = path.slice(extIndex + 1);
+  return fileInfo;
+}
+
 /**
  * Adds the specified amount of padding around an image.
  * 
  * Note that the padding will not be even on images that are not square.
- * 
- * @since 2.0.0
  * 
  * @param {string} path The path to the image to add padding to.
  * @param {number} padding The amount of padding to add to the image.
@@ -1066,10 +1040,7 @@ function pad(path, padding) {
 }
 
 /**
- * Crop an image to a specified size by providing the start location of the crop and
- * the dimensions that the product should have.
- * 
- * @version 1.0.0
+ * Crop an image to a specified size by providing the start location of the crop and the dimensions that the product should have.
  * 
  * @param {string} path The path to the image to crop.
  * @param {number} x The horizontal location in the original image to begin the crop.
@@ -1151,24 +1122,13 @@ function crop(path, x, y, width, height) {
 }
 
 /**
- * Contains math methods not available from the standard JavaScript library.
- * 
- * @author Robert Corponoi
- * 
- * @version 2.0.0
- */
-
-/**
  * Simplify a fraction by using the greatest common divisor method.
- * 
- * @since 0.1.0
  * 
  * @param {number} numerator The top number of the fraction to simplify.
  * @param {number} denominator The bottom number of the fraction to simplify.
  * 
  * @returns {Object} Returns an object with the numerator/denominator as properties and the simplified results as the values.
  */
-
 function simplify(numerator, denominator) {
   var divisor = gcd(numerator, denominator);
   var aspectRatio = {
@@ -1178,15 +1138,7 @@ function simplify(numerator, denominator) {
   return aspectRatio;
 }
 /**
- * 
- * @param num1 
- * @param num2 
- */
-
-/**
  * Find the greatest common divisor between two numbers.
- * 
- * @since 0.1.0
  * 
  * @param {number} num1 The first number.
  * @param {number} num2 The second number.
@@ -1206,10 +1158,6 @@ function gcd(num1, num2) {
 
 /**
  * Extends the GeneralOptions object for crop specific options.
- * 
- * @author Robert Corponoi <robertcorponoi@gmail.com>
- * 
- * @version 0.1.0
  */
 
 var CropOptions =
@@ -1219,8 +1167,6 @@ function (_GeneralOptions) {
 
   /**
    * Indicates whether the image should scale proportionally or not.
-   * 
-   * @since 0.1.0
    * 
    * @property {boolean}
    * 
@@ -1248,8 +1194,6 @@ function (_GeneralOptions) {
 
 /**
  * Resize an image to a new dimension.
- * 
- * @since 1.0.0
  * 
  * @param {string} path The path to the image to resize.
  * @param {string} dimension Which dimension to resize, either width or height. Keep in mind that if you're preserving the aspect ratio, the other will resize accordingly.
@@ -1324,8 +1268,6 @@ function resize(path, dimension, size) {
 
 /**
  * Rotate an image to a specified angle.
- *
- * @since 0.0.0
  *
  * @param {string} path The path to the image to rotate.
  * @param {number} angle The degree angle to rotate the image to, clockwise.
@@ -1410,8 +1352,6 @@ function rotate(path, angle) {
 
 /**
  * Convert an image from one format to another format.
- * 
- * @since 1.0.0
  * 
  * @param {string} path The path to the image to convert to another format.
  * @param {string} format The new format for the image.

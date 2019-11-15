@@ -1,6 +1,6 @@
 'use strict'
 
-/// <reference path="../interfaces/FileInfo.ts" />
+import FileInfo from '../interfaces/FileInfo';
 
 import { loadImage } from '../utils/load';
 import { extractFileInfo } from '../utils/file';
@@ -9,8 +9,6 @@ import GeneralOptions from '../options/GeneralOptions';
 
 /**
  * Rotate an image to a specified angle.
- *
- * @since 0.0.0
  *
  * @param {string} path The path to the image to rotate.
  * @param {number} angle The degree angle to rotate the image to, clockwise.

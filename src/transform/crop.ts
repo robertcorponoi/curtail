@@ -1,6 +1,6 @@
 'use strict'
 
-/// <reference path="../interfaces/FileInfo.ts" />
+import FileInfo from '../interfaces/FileInfo';
 
 import { loadImage } from '../utils/load';
 import { extractFileInfo } from '../utils/file';
@@ -8,10 +8,7 @@ import { extractFileInfo } from '../utils/file';
 import GeneralOptions from '../options/GeneralOptions';
 
 /**
- * Crop an image to a specified size by providing the start location of the crop and
- * the dimensions that the product should have.
- * 
- * @version 1.0.0
+ * Crop an image to a specified size by providing the start location of the crop and the dimensions that the product should have.
  * 
  * @param {string} path The path to the image to crop.
  * @param {number} x The horizontal location in the original image to begin the crop.

@@ -1,19 +1,7 @@
 'use strict'
 
 /**
- * Checks the user input along with the image dimensions to make sure that
- * the input can product a valid result.
- * 
- * @author Robert Corponoi <robertcorponoi@gmail.com>
- * 
- * @version 0.1.0
- */
-
-/**
- * Make sure that location chosen on the image is within the bounds of the
- * image.
- * 
- * @since 0.1.0
+ * Make sure that location chosen on the image is within the bounds of the image.
  * 
  * @param {number} x The x location chosen by the user.
  * @param {number} y The y location chosen by the user.
@@ -28,10 +16,7 @@ export function validateLocation(x: number, y: number, image: HTMLImageElement):
 }
 
 /**
- * Make sure that the dimensions chosen by the user along with the location
- * is within the bounds of the image.
- * 
- * @since 0.1.0
+ * Make sure that the dimensions chosen by the user along with the location is within the bounds of the image.
  * 
  * @param {number} x The x location chosen by the user.
  * @param {number} y The y location chosen by the user.
