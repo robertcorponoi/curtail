@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="./curtail.png">
+  <img width="250" height="250" src="https://github.com/robertcorponoi/graphics/blob/master/curtail/curtail-logo.png?raw=true">
 </p>
 
 <h1 align="center">Curtail</h1>
@@ -7,17 +7,20 @@
 <p align="center">Curtail is a pure JavaScript image manipulation tool.<p>
 
 <div align="center">
-  <a href="https://badge.fury.io/js/curtail"><img src="https://badge.fury.io/js/curtail.svg" alt="npm version" height="18"></a>
-  <a href="https://badge.fury.io/js/curtail"><img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="build" height="18"></a>
+
+  [![NPM version](https://img.shields.io/npm/v/curtail.svg?style=flat)](https://www.npmjs.com/package/curtail)
+  [![Known Vulnerabilities](https://snyk.io/test/github/robertcorponoi/curtail/badge.svg)](https://snyk.io/test/github/robertcorponoi/curtail)
+  ![npm](https://img.shields.io/npm/dt/curtail)
+  [![NPM downloads](https://img.shields.io/npm/dm/curtail.svg?style=flat)](https://www.npmjs.com/package/curtail)
   <a href="https://badge.fury.io/js/curtail"><img src="https://img.shields.io/github/issues/robertcorponoi/curtail.svg" alt="issues" height="18"></a>
   <a href="https://badge.fury.io/js/curtail"><img src="https://img.shields.io/github/license/robertcorponoi/curtail.svg" alt="license" height="18"></a>
-</div>
+  [![Gitter](https://badges.gitter.im/gitterHQ/gitter.svg)](https://gitter.im/robertcorponoi)
 
-**Note:** This documentation is for Curtail 3.0, the most recent version of Curtail which reflects some API changes.
+</div>
 
 ## **Installation**
 
-To download Curtail through npm, simply use the following command:
+To download Curtail through npm, simply use:
 
 ```
 $ npm install curtail

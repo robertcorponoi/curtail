@@ -732,6 +732,44 @@ try {
 
 var regenerator = runtime_1;
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+var asyncToGenerator = _asyncToGenerator;
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -741,16 +779,14 @@ function _classCallCheck(instance, Constructor) {
 var classCallCheck = _classCallCheck;
 
 var _typeof_1 = createCommonjsModule(function (module) {
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
 function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     module.exports = _typeof = function _typeof(obj) {
-      return _typeof2(obj);
+      return typeof obj;
     };
   } else {
     module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
   }
 
@@ -904,30 +940,39 @@ function (_GeneralOptions) {
   return PadOptions;
 }(GeneralOptions);
 
-function loadImage(path, crossOrigin) {
-  var image;
-  return regenerator.async(function loadImage$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          image = new Image();
-          return _context.abrupt("return", new Promise(function (resolve, reject) {
-            image.addEventListener('load', function () {
-              resolve(image);
-            });
-            image.addEventListener('error', function (error) {
-              reject(error);
-            });
-            image.src = path;
-            if (crossOrigin) image.crossOrigin = crossOrigin;
-          }));
+function loadImage(_x, _x2) {
+  return _loadImage.apply(this, arguments);
+}
 
-        case 2:
-        case "end":
-          return _context.stop();
+function _loadImage() {
+  _loadImage = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, crossOrigin) {
+    var image;
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            image = new Image();
+            return _context.abrupt("return", new Promise(function (resolve, reject) {
+              image.addEventListener('load', function () {
+                resolve(image);
+              });
+              image.addEventListener('error', function (error) {
+                reject(error);
+              });
+              image.src = path;
+              if (crossOrigin) image.crossOrigin = crossOrigin;
+            }));
+
+          case 2:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  });
+    }, _callee);
+  }));
+  return _loadImage.apply(this, arguments);
 }
 
 /**
@@ -966,77 +1011,86 @@ function extractFileInfo(path) {
  * @returns {Promise<HTMLImageElement>} Returns the newly padded image as an image element.
  */
 
-function pad(path, padding) {
-  var options,
-      _options,
-      canvas,
-      ctx,
-      fileInfo,
-      image,
-      paddedImage,
-      imageLink,
-      _args = arguments;
+function pad(_x, _x2) {
+  return _pad.apply(this, arguments);
+}
 
-  return regenerator.async(function pad$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-          _options = new PadOptions(options);
-          canvas = document.createElement('canvas');
-          ctx = canvas.getContext('2d');
-          fileInfo = extractFileInfo(path);
-          _context.prev = 5;
-          _context.next = 8;
-          return regenerator.awrap(loadImage(path, _options.crossOrigin));
+function _pad() {
+  _pad = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, padding) {
+    var options,
+        _options,
+        canvas,
+        ctx,
+        fileInfo,
+        image,
+        paddedImage,
+        imageLink,
+        _args = arguments;
 
-        case 8:
-          image = _context.sent;
-          canvas.width = image.width + padding * 2;
-          canvas.height = image.height + padding * 2;
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            _options = new PadOptions(options);
+            canvas = document.createElement('canvas');
+            ctx = canvas.getContext('2d');
+            fileInfo = extractFileInfo(path);
+            _context.prev = 5;
+            _context.next = 8;
+            return loadImage(path, _options.crossOrigin);
 
-          if (_options.paddingColor !== 'transparent') {
-            ctx.fillStyle = _options.paddingColor;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
+          case 8:
+            image = _context.sent;
+            canvas.width = image.width + padding * 2;
+            canvas.height = image.height + padding * 2;
 
-          ctx.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.height / 2, image.width, image.height);
-          _context.prev = 13;
-          _context.next = 16;
-          return regenerator.awrap(loadImage(canvas.toDataURL("image/".concat(fileInfo.ext))));
+            if (_options.paddingColor !== 'transparent') {
+              ctx.fillStyle = _options.paddingColor;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
 
-        case 16:
-          paddedImage = _context.sent;
+            ctx.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.height / 2, image.width, image.height);
+            _context.prev = 13;
+            _context.next = 16;
+            return loadImage(canvas.toDataURL("image/".concat(fileInfo.ext)));
 
-          if (_options.autodownload) {
-            imageLink = document.createElement('a');
-            imageLink.href = image.src;
-            imageLink.download = fileInfo.name + '.' + fileInfo.ext;
-            imageLink.click();
-          }
+          case 16:
+            paddedImage = _context.sent;
 
-          return _context.abrupt("return", paddedImage);
+            if (_options.autodownload) {
+              imageLink = document.createElement('a');
+              imageLink.href = image.src;
+              imageLink.download = fileInfo.name + '.' + fileInfo.ext;
+              imageLink.click();
+            }
 
-        case 21:
-          _context.prev = 21;
-          _context.t0 = _context["catch"](13);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+            return _context.abrupt("return", paddedImage);
 
-        case 24:
-          _context.next = 29;
-          break;
+          case 21:
+            _context.prev = 21;
+            _context.t0 = _context["catch"](13);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
 
-        case 26:
-          _context.prev = 26;
-          _context.t1 = _context["catch"](5);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+          case 24:
+            _context.next = 29;
+            break;
 
-        case 29:
-        case "end":
-          return _context.stop();
+          case 26:
+            _context.prev = 26;
+            _context.t1 = _context["catch"](5);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+
+          case 29:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  }, null, null, [[5, 26], [13, 21]]);
+    }, _callee, null, [[5, 26], [13, 21]]);
+  }));
+  return _pad.apply(this, arguments);
 }
 
 /**
@@ -1054,71 +1108,80 @@ function pad(path, padding) {
  * @returns {Promize<HTMLImageElement>} Returns the newly cropped image as an image element.
  */
 
-function crop(path, x, y, width, height) {
-  var options,
-      _options,
-      canvas,
-      ctx,
-      fileInfo,
-      image,
-      croppedImage,
-      imageLink,
-      _args = arguments;
+function crop(_x, _x2, _x3, _x4, _x5) {
+  return _crop.apply(this, arguments);
+}
 
-  return regenerator.async(function crop$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          options = _args.length > 5 && _args[5] !== undefined ? _args[5] : {};
-          _options = new GeneralOptions(options);
-          canvas = document.createElement('canvas');
-          ctx = canvas.getContext('2d');
-          fileInfo = extractFileInfo(path);
-          _context.prev = 5;
-          _context.next = 8;
-          return regenerator.awrap(loadImage(path, _options.crossOrigin));
+function _crop() {
+  _crop = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, x, y, width, height) {
+    var options,
+        _options,
+        canvas,
+        ctx,
+        fileInfo,
+        image,
+        croppedImage,
+        imageLink,
+        _args = arguments;
 
-        case 8:
-          image = _context.sent;
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
-          _context.prev = 12;
-          _context.next = 15;
-          return regenerator.awrap(loadImage(canvas.toDataURL("image/".concat(fileInfo.ext)).replace("image/".concat(fileInfo.ext), 'image/octet-stream')));
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 5 && _args[5] !== undefined ? _args[5] : {};
+            _options = new GeneralOptions(options);
+            canvas = document.createElement('canvas');
+            ctx = canvas.getContext('2d');
+            fileInfo = extractFileInfo(path);
+            _context.prev = 5;
+            _context.next = 8;
+            return loadImage(path, _options.crossOrigin);
 
-        case 15:
-          croppedImage = _context.sent;
+          case 8:
+            image = _context.sent;
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
+            _context.prev = 12;
+            _context.next = 15;
+            return loadImage(canvas.toDataURL("image/".concat(fileInfo.ext)).replace("image/".concat(fileInfo.ext), 'image/octet-stream'));
 
-          if (_options.autodownload) {
-            imageLink = document.createElement('a');
-            imageLink.href = croppedImage.src;
-            imageLink.download = fileInfo.name + '.' + fileInfo.ext;
-            imageLink.click();
-          }
+          case 15:
+            croppedImage = _context.sent;
 
-          return _context.abrupt("return", croppedImage);
+            if (_options.autodownload) {
+              imageLink = document.createElement('a');
+              imageLink.href = croppedImage.src;
+              imageLink.download = fileInfo.name + '.' + fileInfo.ext;
+              imageLink.click();
+            }
 
-        case 20:
-          _context.prev = 20;
-          _context.t0 = _context["catch"](12);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+            return _context.abrupt("return", croppedImage);
 
-        case 23:
-          _context.next = 28;
-          break;
+          case 20:
+            _context.prev = 20;
+            _context.t0 = _context["catch"](12);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
 
-        case 25:
-          _context.prev = 25;
-          _context.t1 = _context["catch"](5);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+          case 23:
+            _context.next = 28;
+            break;
 
-        case 28:
-        case "end":
-          return _context.stop();
+          case 25:
+            _context.prev = 25;
+            _context.t1 = _context["catch"](5);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+
+          case 28:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  }, null, null, [[5, 25], [12, 20]]);
+    }, _callee, null, [[5, 25], [12, 20]]);
+  }));
+  return _crop.apply(this, arguments);
 }
 
 /**
@@ -1206,64 +1269,73 @@ function (_GeneralOptions) {
  * @returns {Promise<HTMLImageElement>} Returns the newly resized image as an image element.
  */
 
-function resize(path, dimension, size) {
-  var options,
-      _options,
-      fileInfo,
-      image,
-      aspectRatio,
-      imageLink,
-      _args = arguments;
+function resize(_x, _x2, _x3) {
+  return _resize.apply(this, arguments);
+}
 
-  return regenerator.async(function resize$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          options = _args.length > 3 && _args[3] !== undefined ? _args[3] : {};
-          _options = new CropOptions(options);
-          fileInfo = extractFileInfo(path);
-          _context.prev = 3;
-          _context.next = 6;
-          return regenerator.awrap(loadImage(path, _options.crossOrigin));
+function _resize() {
+  _resize = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, dimension, size) {
+    var options,
+        _options,
+        fileInfo,
+        image,
+        aspectRatio,
+        imageLink,
+        _args = arguments;
 
-        case 6:
-          image = _context.sent;
-          aspectRatio = simplify(image.width, image.height);
-          _context.t0 = dimension;
-          _context.next = _context.t0 === 'width' ? 11 : _context.t0 === 'height' ? 14 : 17;
-          break;
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 3 && _args[3] !== undefined ? _args[3] : {};
+            _options = new CropOptions(options);
+            fileInfo = extractFileInfo(path);
+            _context.prev = 3;
+            _context.next = 6;
+            return loadImage(path, _options.crossOrigin);
 
-        case 11:
-          image.width = size;
-          if (_options.preserveAspectRatio) image.height = Math.round(aspectRatio.denominator / aspectRatio.numerator * size);
-          return _context.abrupt("break", 17);
+          case 6:
+            image = _context.sent;
+            aspectRatio = simplify(image.width, image.height);
+            _context.t0 = dimension;
+            _context.next = _context.t0 === 'width' ? 11 : _context.t0 === 'height' ? 14 : 17;
+            break;
 
-        case 14:
-          image.height = size;
-          if (_options.preserveAspectRatio) image.width = Math.round(aspectRatio.numerator / aspectRatio.denominator * size);
-          return _context.abrupt("break", 17);
+          case 11:
+            image.width = size;
+            if (_options.preserveAspectRatio) image.height = Math.round(aspectRatio.denominator / aspectRatio.numerator * size);
+            return _context.abrupt("break", 17);
 
-        case 17:
-          if (_options.autodownload) {
-            imageLink = document.createElement('a');
-            imageLink.href = image.src;
-            imageLink.download = fileInfo.name + '.' + fileInfo.ext;
-            imageLink.click();
-          }
+          case 14:
+            image.height = size;
+            if (_options.preserveAspectRatio) image.width = Math.round(aspectRatio.numerator / aspectRatio.denominator * size);
+            return _context.abrupt("break", 17);
 
-          return _context.abrupt("return", image);
+          case 17:
+            if (_options.autodownload) {
+              imageLink = document.createElement('a');
+              imageLink.href = image.src;
+              imageLink.download = fileInfo.name + '.' + fileInfo.ext;
+              imageLink.click();
+            }
 
-        case 21:
-          _context.prev = 21;
-          _context.t1 = _context["catch"](3);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+            return _context.abrupt("return", image);
 
-        case 24:
-        case "end":
-          return _context.stop();
+          case 21:
+            _context.prev = 21;
+            _context.t1 = _context["catch"](3);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+
+          case 24:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  }, null, null, [[3, 21]]);
+    }, _callee, null, [[3, 21]]);
+  }));
+  return _resize.apply(this, arguments);
 }
 
 /**
@@ -1276,78 +1348,87 @@ function resize(path, dimension, size) {
  * @param {string} [options.crossOrigin=null] Sets the cross-origin property of the image which is needed if the image is from a different domain.
  */
 
-function rotate(path, angle) {
-  var options,
-      _options,
-      canvas,
-      ctx,
-      fileInfo,
-      image,
-      largestSide,
-      rotatedImage,
-      imageLink,
-      _args = arguments;
+function rotate(_x, _x2) {
+  return _rotate.apply(this, arguments);
+}
 
-  return regenerator.async(function rotate$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-          _options = new GeneralOptions(options);
-          canvas = document.createElement('canvas');
-          ctx = canvas.getContext('2d');
-          fileInfo = extractFileInfo(path);
-          _context.prev = 5;
-          _context.next = 8;
-          return regenerator.awrap(loadImage(path, _options.crossOrigin));
+function _rotate() {
+  _rotate = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, angle) {
+    var options,
+        _options,
+        canvas,
+        ctx,
+        fileInfo,
+        image,
+        largestSide,
+        rotatedImage,
+        imageLink,
+        _args = arguments;
 
-        case 8:
-          image = _context.sent;
-          largestSide = image.width;
-          if (image.height > image.width) largestSide = image.height;
-          canvas.width, canvas.height = largestSide;
-          ctx.save();
-          ctx.translate(canvas.width / 2, canvas.height / 2);
-          ctx.rotate(angle * Math.PI / 180);
-          ctx.translate(-(canvas.width / 2), -(canvas.height / 2));
-          ctx.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.height / 2);
-          ctx.restore();
-          _context.prev = 18;
-          _context.next = 21;
-          return regenerator.awrap(loadImage(canvas.toDataURL("image/".concat(fileInfo.ext)).replace("image/".concat(fileInfo.ext), 'image/octet-stream')));
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            _options = new GeneralOptions(options);
+            canvas = document.createElement('canvas');
+            ctx = canvas.getContext('2d');
+            fileInfo = extractFileInfo(path);
+            _context.prev = 5;
+            _context.next = 8;
+            return loadImage(path, _options.crossOrigin);
 
-        case 21:
-          rotatedImage = _context.sent;
+          case 8:
+            image = _context.sent;
+            largestSide = image.width;
+            if (image.height > image.width) largestSide = image.height;
+            canvas.width, canvas.height = largestSide;
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(angle * Math.PI / 180);
+            ctx.translate(-(canvas.width / 2), -(canvas.height / 2));
+            ctx.drawImage(image, canvas.width / 2 - image.width / 2, canvas.height / 2 - image.height / 2);
+            ctx.restore();
+            _context.prev = 18;
+            _context.next = 21;
+            return loadImage(canvas.toDataURL("image/".concat(fileInfo.ext)).replace("image/".concat(fileInfo.ext), 'image/octet-stream'));
 
-          if (_options.autodownload) {
-            imageLink = document.createElement('a');
-            imageLink.href = rotatedImage.src;
-            imageLink.download = fileInfo.name + '.' + fileInfo.ext;
-            imageLink.click();
-          }
+          case 21:
+            rotatedImage = _context.sent;
 
-          return _context.abrupt("return", rotatedImage);
+            if (_options.autodownload) {
+              imageLink = document.createElement('a');
+              imageLink.href = rotatedImage.src;
+              imageLink.download = fileInfo.name + '.' + fileInfo.ext;
+              imageLink.click();
+            }
 
-        case 26:
-          _context.prev = 26;
-          _context.t0 = _context["catch"](18);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+            return _context.abrupt("return", rotatedImage);
 
-        case 29:
-          _context.next = 34;
-          break;
+          case 26:
+            _context.prev = 26;
+            _context.t0 = _context["catch"](18);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
 
-        case 31:
-          _context.prev = 31;
-          _context.t1 = _context["catch"](5);
-          throw new Error('There was an error loading the image, please check to make sure the path is valid and try again.');
+          case 29:
+            _context.next = 34;
+            break;
 
-        case 34:
-        case "end":
-          return _context.stop();
+          case 31:
+            _context.prev = 31;
+            _context.t1 = _context["catch"](5);
+            throw new Error('There was an error loading the image, please check to make sure the path is valid and try again.');
+
+          case 34:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  }, null, null, [[5, 31], [18, 26]]);
+    }, _callee, null, [[5, 31], [18, 26]]);
+  }));
+  return _rotate.apply(this, arguments);
 }
 
 /**
@@ -1362,81 +1443,90 @@ function rotate(path, angle) {
  * @returns {Promise<HTMLImageElement>} Returns the newly formatted image as an image element.
  */
 
-function convert(path, format) {
-  var options,
-      fileInfo,
-      _options,
-      canvas,
-      ctx,
-      nonTransparentFormats,
-      image,
-      f,
-      convertedImage,
-      imageLink,
-      _args = arguments;
+function convert(_x, _x2) {
+  return _convert.apply(this, arguments);
+}
 
-  return regenerator.async(function convert$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-          fileInfo = extractFileInfo(path);
-          _options = new GeneralOptions(options);
-          canvas = document.createElement('canvas');
-          ctx = canvas.getContext('2d');
-          nonTransparentFormats = ['jpg', 'jpeg', 'gif', 'bmp'];
-          _context.prev = 6;
-          _context.next = 9;
-          return regenerator.awrap(loadImage(path, _options.crossOrigin));
+function _convert() {
+  _convert = asyncToGenerator(
+  /*#__PURE__*/
+  regenerator.mark(function _callee(path, format) {
+    var options,
+        fileInfo,
+        _options,
+        canvas,
+        ctx,
+        nonTransparentFormats,
+        image,
+        f,
+        convertedImage,
+        imageLink,
+        _args = arguments;
 
-        case 9:
-          image = _context.sent;
-          canvas.width = image.width;
-          canvas.height = image.height;
+    return regenerator.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
+            fileInfo = extractFileInfo(path);
+            _options = new GeneralOptions(options);
+            canvas = document.createElement('canvas');
+            ctx = canvas.getContext('2d');
+            nonTransparentFormats = ['jpg', 'jpeg', 'gif', 'bmp'];
+            _context.prev = 6;
+            _context.next = 9;
+            return loadImage(path, _options.crossOrigin);
 
-          if (nonTransparentFormats.includes(format)) {
-            ctx.fillStyle = '#FFF';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-          }
+          case 9:
+            image = _context.sent;
+            canvas.width = image.width;
+            canvas.height = image.height;
 
-          ctx.drawImage(image, 0, 0);
-          _context.prev = 14;
-          f = format === 'png' ? 'png' : 'jpeg';
-          _context.next = 18;
-          return regenerator.awrap(loadImage(canvas.toDataURL("image/".concat(f))));
+            if (nonTransparentFormats.includes(format)) {
+              ctx.fillStyle = '#FFF';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
 
-        case 18:
-          convertedImage = _context.sent;
+            ctx.drawImage(image, 0, 0);
+            _context.prev = 14;
+            f = format === 'png' ? 'png' : 'jpeg';
+            _context.next = 18;
+            return loadImage(canvas.toDataURL("image/".concat(f)));
 
-          if (_options.autodownload) {
-            imageLink = document.createElement('a');
-            imageLink.href = convertedImage.src;
-            imageLink.download = fileInfo.name + '.' + format;
-            imageLink.click();
-          }
+          case 18:
+            convertedImage = _context.sent;
 
-          return _context.abrupt("return", convertedImage);
+            if (_options.autodownload) {
+              imageLink = document.createElement('a');
+              imageLink.href = convertedImage.src;
+              imageLink.download = fileInfo.name + '.' + format;
+              imageLink.click();
+            }
 
-        case 23:
-          _context.prev = 23;
-          _context.t0 = _context["catch"](14);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+            return _context.abrupt("return", convertedImage);
 
-        case 26:
-          _context.next = 31;
-          break;
+          case 23:
+            _context.prev = 23;
+            _context.t0 = _context["catch"](14);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
 
-        case 28:
-          _context.prev = 28;
-          _context.t1 = _context["catch"](6);
-          return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+          case 26:
+            _context.next = 31;
+            break;
 
-        case 31:
-        case "end":
-          return _context.stop();
+          case 28:
+            _context.prev = 28;
+            _context.t1 = _context["catch"](6);
+            return _context.abrupt("return", new Error('There was a problem loading the image, please check to make sure the path is valid'));
+
+          case 31:
+          case "end":
+            return _context.stop();
+        }
       }
-    }
-  }, null, null, [[6, 28], [14, 23]]);
+    }, _callee, null, [[6, 28], [14, 23]]);
+  }));
+  return _convert.apply(this, arguments);
 }
 
 export { convert, crop, pad, resize, rotate };

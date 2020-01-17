@@ -1,3 +1,11 @@
+3.2.0 / 2019-11-14
+==================
+* [MISC] Moved logo to graphics repository.
+* [MISC] Cleaned up old info in README.
+* [MISC] Added more badges to README.
+* [MISC] Updated dev dependencies to their latest version.
+* [MISC] Updated license year to reflect year change.
+
 3.1.5 / 2019-11-14
 ==================
 * [MISC] Updated the interfaces from references to imports.
